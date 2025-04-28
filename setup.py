@@ -44,8 +44,8 @@ setup(
     license='BSD',
     entry_points={
         'console_scripts': [
-            'imu_node = ros2_razor_imu.imu_node:main',
-            'display_3D_visualization_node = ros2_razor_imu.display_3D_visualization:main',
+            'imu_node                = ros2_razor_imu.imu_node:main',
+            'display_3D_visualization = ros2_razor_imu.display_3D_visualization:main',
         ],
     },
 )

@@ -12,31 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription, LaunchIntrospector, LaunchService
-from launch_ros import actions, get_default_launch_description
-
+from launch import LaunchDescription
+from launch_ros.actions import Node
 
 def generate_launch_description():
-    """
-    Launch file for publishing and visualizing Razor IMU data
-    """
-    config_path = os.path.join(get_package_share_directory("razor_imu_9dof"), "config",
-                               "razor.yaml")
+    pkg  = 'ros2_razor_imu'   # ← make sure this matches your <package> name in package.xml
+    cfg  = os.path.join(
+        get_package_share_directory(pkg),
+        'config',
+        'my_razor.yaml'      # ← or "razor.yaml" if that’s what you actually named it
+    )
 
-    print("config path", config_path)
-    imu_node = actions.Node(
-        package='razor_imu_9dof', node_executable='imu_node', output='screen',
-        parameters=[config_path])
+    imu_node = Node(
+        package=pkg,
+        executable='imu_node',             # ← your console_scripts entry-point
+        name='imu_node',
+        output='screen',
+        parameters=[cfg],
+    )
 
-    display_3D_visualization_node = actions.Node(
-        package='razor_imu_9dof', node_executable='display_3D_visualization_node', output='screen')
+    display_node = Node(
+        package=pkg,
+        executable='display_3D_visualization_node',  # ← your entry-point for the viz script
+        name='display_3D_visualization_node',
+        output='screen',
+    )
 
-    return LaunchDescription([imu_node, display_3D_visualization_node])
-
+    return LaunchDescription([
+        imu_node,
+        display_node,
+    ])
 
 def main(args=None):
     ld = generate_launch_description()

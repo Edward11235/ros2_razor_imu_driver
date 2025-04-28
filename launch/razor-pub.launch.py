@@ -13,44 +13,28 @@
 # limitations under the License.
 
 import os
-import sys
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription, LaunchIntrospector, LaunchService
-from launch_ros import actions, get_default_launch_description
-
+from launch import LaunchDescription
+from launch_ros.actions import Node
 
 def generate_launch_description():
     """
-    Launch file for publishing Razor IMU data
+    Launch file for publishing only Razor IMU data (no display).
     """
-    config_path = os.path.join(get_package_share_directory("razor_imu_9dof"), "config",
-                               "razor.yaml")
+    pkg = 'ros2_razor_imu'  # must match your package name
+    config_path = os.path.join(
+        get_package_share_directory(pkg),
+        'config',
+        'my_razor.yaml'       # or 'razor.yaml' if that's your filename
+    )
 
-    imu_node = actions.Node(
-        package='razor_imu_9dof', node_executable='imu_node', output='screen',
-        parameters=[config_path])
+    imu_node = Node(
+        package=pkg,
+        executable='imu_node',
+        name='imu_node',
+        output='screen',
+        parameters=[config_path],
+    )
 
     return LaunchDescription([imu_node])
-
-
-def main(args=None):
-    ld = generate_launch_description()
-
-    print('Starting introspection of launch description...')
-    print('')
-
-    print(LaunchIntrospector().format_launch_description(ld))
-
-    print('')
-    print('Starting launch of launch description...')
-    print('')
-
-    ls = LaunchService()
-    ls.include_launch_description(get_default_launch_description())
-    ls.include_launch_description(ld)
-    return ls.run()
-
-
-if __name__ == '__main__':
-    main(sys.argv)
