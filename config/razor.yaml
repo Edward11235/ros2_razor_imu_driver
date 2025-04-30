@@ -1,7 +1,7 @@
 imu_node:
   ros__parameters:
     port: /dev/tty.usbmodem14201
-    frame_header: "base_imu_link"
+    frame_header: "imu_link"
 
 
     accel_x_min: -250.0
