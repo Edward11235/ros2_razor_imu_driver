@@ -44,7 +44,7 @@ class RazorImuDriver(Node):
         super().__init__('razor_imu_node')
 
         #--- parameters ---
-        self.frame_id = self.declare_parameter('frame_header', 'base_imu_link').value
+        self.frame_id = self.declare_parameter('frame_header', 'imu_link').value
         self.port = self.declare_parameter('port', '/dev/ttyACM0').value
         publish_mag = self.declare_parameter('publish_magnetometer', False).value
         timer_period = self.declare_parameter('timer_period', 0.01).value  # seconds
